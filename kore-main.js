@@ -1,56 +1,50 @@
 (function($){
 
     $(document).ready(function () {
-        // function assertion(options, callback) {
-        //     var jsonData = {
-        //         "clientId": options.clientId,
-        //         "clientSecret": options.clientSecret,
-        //         "identity": options.userIdentity,
-        //         "aud": "",
-        //         "isAnonymous": false
-        //     };
-        //     $.ajax({
-        //         url: options.JWTUrl,
-        //         type: 'post',
-        //         data: jsonData,
-        //         dataType: 'json',
-        //         success: function (data) {
-        //             options.assertion = data.jwt;
-        //             options.handleError = koreBot.showError;
-        //             options.chatHistory = koreBot.chatHistory;
-        //             options.botDetails = koreBot.botDetails;
-        //             callback(null, options);
-        //             setTimeout(function () {
-        //                 if (koreBot && koreBot.initToken) {
-        //                     koreBot.initToken(options);
-        //                 }
-        //             }, 2000);
-        //         },
-        //         error: function (err) {
-        //             koreBot.showError(err.responseText);
-        //         }
-        //     });
-        // }
         function assertion(options, callback) {
-            var korecookie = localStorage.getItem("korecom");
-            var uuid = (korecookie) || koreGenerateUUID();
-            console.log(options);
-            console.log("UUID: ",uuid);
-            localStorage.setItem("korecom", uuid);
-            var time_now = Math.floor(new Date().getTime() / 1000)
-            var exp = time_now + 60 * 60 * 24
-            var jsonData = {
-                "iat": time_now,
-                "exp": exp,
-                "aud": "https://idproxy.kore.com/authorize",
-                "iss": options.clientId,
-                "sub": uuid,
-                "isAnonymous": "true"
+            //crear identidad
+            function getRandomString(length) {
+                var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                var charLength = chars.length;
+                var result = '';
+                for ( var i = 0; i < length; i++ ) {
+                   result += chars.charAt(Math.floor(Math.random() * charLength));
+                }
+                return result;
             }
-            options.assertion = generateJWT(jsonData, options.clientSecret)
-            console.log(options.assertion)
-            callback(null, options);
+            var jsonData = {
+                "botName": options.botInfo.chatBot,
+                "clientId": options.clientId,
+                "clientSecret": options.clientSecret,
+                "identity": getRandomString(20),
+                "aud": "",
+                "isAnonymous": false
+            };
+            console.log(jsonData);
+            $.ajax({
+                url: options.JWTUrl,
+                type: 'post',
+                data: jsonData,
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data.jwt);
+                    options.assertion = data.jwt;
+                    options.handleError = koreBot.showError;
+                    options.chatHistory = koreBot.chatHistory;
+                    options.botDetails = koreBot.botDetails;
+                    callback(null, options);
+                    setTimeout(function () {
+                        if (koreBot && koreBot.initToken) {
+                            koreBot.initToken(options);
+                        }
+                    }, 2000);
+                },
+                error: function (err) {
+                    koreBot.showError(err.responseText);
+                }
+            });
         }
+
         var chatConfig=window.KoreSDK.chatConfig;
         chatConfig.botOptions.assertionFn=assertion;
         

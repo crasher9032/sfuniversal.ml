@@ -1,0 +1,73 @@
+body {
+  color: #3e4148;
+  line-height: 1.6;
+  text-align: center;
+  font-family: "Work Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 300;
+  letter-spacing: 0.025em;
+  font-feature-settings: "liga", "kern";
+  -webkit-text-size-adjust: none;
+}
+.logo-master {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+hr.divider {
+  border: 1px solid #0d446d;
+}
+#submit-input {
+  display: block;
+  width: 100%;
+  background: #f9cc17;
+  font-size: 1em;
+  padding: 14px 16px;
+  box-sizing: border-box;
+  border-radius: 13px;
+  border: none;
+  border-top-color: currentcolor;
+  border-right-color: currentcolor;
+  border-bottom-color: currentcolor;
+  border-left-color: currentcolor;
+  color: #0d446d;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+#submit-input:active,
+#submit-input:hover {
+  background: #0d446d;
+  border-color: #0d446d;
+  color: #fff;
+  text-decoration: none;
+}
+#inputNombre,
+#inputCorreo,
+#inputTarjeta,
+#inputTelefono,
+#inputCVV,
+#inputAVencimiento,
+#inputMVencimiento{
+  display: block;
+  width: 100%;
+  background: #ffffff;
+  font-size: 15px;
+  margin-top: 26px;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #0069a2;
+  border-radius: 13px;
+  color: #0069a2 !important;
+  font-weight: 500;
+  line-height: 1.25em;
+  letter-spacing: 0.025em;
+  outline: none;
+  text-transform: none;
+  text-align: left;
+}

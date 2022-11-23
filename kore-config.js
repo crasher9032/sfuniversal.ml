@@ -11,7 +11,7 @@
     botOptions.koreAnonymousFn = koreAnonymousFn;
     botOptions.recorderWorkerPath = '../libs/recorderWorker.js';
   //  botOptions.assertionFn = assertion;
-    //botOptions.JWTUrl = "PLEASE_ENTER_JWTURL_HERE";
+    botOptions.JWTUrl = "http://ec2-54-164-250-93.compute-1.amazonaws.com:3009/api/users/sts";
     botOptions.userIdentity = 'daniel@smart-force.com';// Provide users email id here
     botOptions.botInfo = { name: "El Universal", "_id": "st-5f411293-4e68-571c-8f9c-fbf7f4132f51" }; // bot name is case sensitive
     botOptions.clientId = "cs-ab90b803-2fb0-5e61-ba31-92eaa183311d";

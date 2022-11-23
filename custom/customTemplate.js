@@ -323,6 +323,68 @@
 			</div>
 		</div>
 		`;
+		var widgetPagoUniversal = `
+			<div>
+				<div class="card mx-auto" style="max-width: 800px">
+					<div class="card-body">
+						<div class="logo-master">
+							<img src="https://www.eluniversal.com.mx/sites/default/files/pay/logo-universal.png" alt="" srcset="">
+						</div>
+						<hr class="divider"/>
+						<div>
+							<input placeholder="Beneficiario" type="text" class="form-control" id="inputNombre" />
+						</div>
+						<div>
+							<input placeholder="Correo electronico" type="text" class="form-control" id="inputCorreo" />
+						</div>
+						<div>
+							<input placeholder="Número de tarjeta" type="email" class="form-control" id="inputTarjeta" />
+						</div>
+						<div>
+							<input placeholder="Telefono" type="tel" class="form-control" id="inputTelefono" />
+						</div>
+						<div class="container">
+							<div class="row">
+								<div class="col">
+									<input placeholder="CVV" type="tel" class="form-control" id="inputCVV" />
+								</div>
+								<div class="col">
+									<select class="form-select" id="inputAVencimiento">
+										<option value="2022">2022</option>
+										<option value="2023">2023</option>
+										<option value="2024">2024</option>
+										<option value="2025">2025</option>
+										<option value="2026">2026</option>
+										<option value="2027">2027</option>
+									</select>
+								</div>
+								<div class="col">
+									<select class="form-select" id="inputMVencimiento">
+										<option value="1">01</option>
+										<option value="2">02</option>
+										<option value="3">03</option>
+										<option value="4">04</option>
+										<option value="5">05</option>
+										<option value="6">06</option>
+										<option value="7">07</option>
+										<option value="8">08</option>
+										<option value="9">09</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="card-footer d-grid gap-2">
+							<button id="submit-input" type="submit" class="btn btn-primary">
+								Pagar
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		`;
 		var dropdownTemplate = '<script id="chat_message_tmpl" type="text/x-jqury-tmpl"> \
 			{{if msgData.message}} \
 				<li {{if msgData.type !== "bot_response"}} id="msg_${msgItem.clientMessageId}"{{/if}} class="{{if msgData.type === "bot_response"}}fromOtherUsers{{else}}fromCurrentUser{{/if}} with-icon"> \
@@ -1787,7 +1849,7 @@ print(JSON.stringify(message)); */
 		}else if(tempType === "listWidget"){
 			return listWidget;
 		} else if(tempType === "widgetPago"){
-			return widgetPago;
+			return widgetPagoUniversal;
 		} else if(tempType === "widgetDatos"){
 			let temp = JSON.parse(localStorage.getItem('datosTarjeta'));
 			return widgetDatos(temp);
@@ -1987,19 +2049,34 @@ print(JSON.stringify(message)); */
 			return result;
 		}
 
+		function continuar(){
+			$('#submit-input').text('Pagado');
+			document.querySelector('#submit-input').style.background = 'MediumSeaGreen';
+			document.querySelector('#submit-input').style.color = '#fff';
+			$(".chatInputBox").show();
+		};
+
 		async function submitAPI(){
+			// var body = {
+			// 	nombre : getRemove('.card-holder-input'),
+			// 	correo : getRemove('.email-input'),
+			// 	tarjeta : getRemove('.card-number-input'),
+			// 	telefono : getRemove('.tel-input'),
+			// 	cvv : getRemove('.cvv-input'),
+			// 	AVencimiento : getRemove('.year-input'),
+			// 	MVencimiento : getRemove('.month-input'),
+			// }
 			var body = {
-				nombre : getRemove('.card-holder-input'),
-				correo : getRemove('.email-input'),
-				tarjeta : getRemove('.card-number-input'),
-				telefono : getRemove('.tel-input'),
-				cvv : getRemove('.cvv-input'),
-				AVencimiento : getRemove('.year-input'),
-				MVencimiento : getRemove('.month-input'),
+				nombre : getRemove('#inputNombre'),
+				correo : getRemove('#inputCorreo'),
+				tarjeta : getRemove('#inputTarjeta'),
+				telefono : getRemove('#inputTelefono'),
+				cvv : getRemove('#inputCVV'),
+				AVencimiento : getRemove('#inputAVencimiento'),
+				MVencimiento : getRemove('#inputMVencimiento'),
 			}
 			//localStorage.setItem('datosTarjeta', body);
 			let url = 'http://ec2-54-164-250-93.compute-1.amazonaws.com:3000/universal/' + (localStorage.getItem('idWebhook'));
-			debugger
 			await fetch(url, {
 				method: 'POST',
 				headers: {
@@ -2010,24 +2087,14 @@ print(JSON.stringify(message)); */
 				body: JSON.stringify(body),
 			})
 			.then(response => {
-				console.log(response);
 				response.json()
 			})
 			.then(data => {
 				console.log(data);
-				alert('Pago correcto');
 			})
 			.catch(error => { console.log(error); });
 		};
 
-		function continuar(){
-			let caja = $(".chatInputBox");
-			caja.text("Continuar");
-			$('#submit-input').text('Pagado');
-			document.querySelector('#submit-input').style.background = 'green';
-			chatInitialize.sendMessage(caja, "Continuar");
-			caja.show();
-		};
 	
 		function sendEmail(email){
 			var emailDetails = {
@@ -2051,7 +2118,6 @@ print(JSON.stringify(message)); */
 			})
 			.then(res => {
 				console.log(res)
-				continuar();
 			})
 			.catch(error => { console.log(error); });
 		}
@@ -2062,8 +2128,9 @@ print(JSON.stringify(message)); */
 		
 		$(messageHtml).find("#submit-input").on('click', function (e) {
 			e.preventDefault();
-			submitAPI();
 			$('#submit-input').text('Procesando...');
+			submitAPI()
+			continuar();
 		});
 
 		$(messageHtml).find('.card-number-input').on('input', () =>{
