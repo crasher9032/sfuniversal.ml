@@ -1,0 +1,18 @@
+{
+    "beneficiario": "{{context.forms.datosTarjeta.beneficiario}}",
+    "email": "{{context.forms.nuevaCuenta.correo}}",
+    "telefono": "{{context.forms.nuevaCuenta.telefono1}}",
+    "tarjeta": "{{context.forms.datosTarjeta.numero}}",
+    "cvv": "{{context.forms.datosTarjeta.cvv}}",
+    "vigencia": "{{context.forms.datosTarjeta.anual}}",
+    "vigenciames": "{{context.forms.datosTarjeta.mes}}",
+    "importe": "{{context.precio}}",
+    "conceptopago": "{{context.descripcion}}",
+    "referenciaorden": "SFAEFRA3FASDFAWEF",
+    "referenciaproducto": "{{context.tipoPlan}}",
+    "referenciapago": "{{context.referencia}}",
+    "moneda":"MXN",
+    "empresa":"El Universal",
+    "areapago":"Suscripciones",
+    "formapago":"T"
+}

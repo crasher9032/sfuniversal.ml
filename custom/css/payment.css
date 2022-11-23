@@ -1,0 +1,8 @@
+#header{
+    height: 300px;
+    line-height: 300px;
+    text-align: center;
+    font-size: 40px;
+    color: white;
+    background: linear-gradient(45deg, #B983FF, #94B3FD, #94DAFF, #99FEFF);
+}

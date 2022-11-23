@@ -1,0 +1,117 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.1, maximum-scale=1.0">
+		<meta charset="utf-8">
+		<script type="text/javascript" src="./hmac-sha256.js"></script>
+    	<script type="text/javascript" src="./enc-base64-min.js"></script>
+		<link rel="stylesheet" href="custom/css/payment.css">
+		<link rel="stylesheet" href="custom/css/style.css">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+		<script src="libs/kore-no-conflict-start.js" type="text/javascript"></script>		
+		<script src="libs/jquery.js" type="text/javascript"></script>
+		<script src="libs/jquery.tmpl.min.js" type="text/javascript"></script>
+		<script src="libs/jquery-ui.min.js" type="text/javascript"></script>
+		<link href="libs/jquery-ui.min.css" rel="stylesheet"></link>
+		<script src="libs/moment.js" type="text/javascript"></script>
+		<script src="libs2/ie11CustomProperties.js"></script>
+		<script src="libs2/lodash.min.js"></script>
+		<script src="libs2/d3.v4.min.js"></script>
+		<script src="libs2/KoreGraphAdapter.js" type="text/javascript"></script>
+		<script src='libs2/anonymousassertion.js'></script>
+		<script src="kore-bot-sdk-client.js"></script>
+		<script src="libs2/perfect-scrollbar.js" type="text/javascript"></script>
+	
+		<!-- Uncomment these lines for amazon polly -->
+		<!-- <script src="../plugins/aws-sdk-2.668.0.min.js"></script>
+		<script src="../plugins/kore-aws-polly.js" type="text/javascript"></script> -->
+		
+		<script src="chatWindow.js" type="text/javascript"></script>
+		<script src="libs/jquery.daterangepicker.js" type="text/javascript"></script>
+		<link href="libs/daterangepicker.css" rel="stylesheet"></link>
+		<script src="libs/jquery-clockpicker.js" type="text/javascript"></script>
+		<link href="libs/jquery-clockpicker.css" rel="stylesheet"></link>
+		<link href="libs2/kore-pickers.css" rel="stylesheet"></link>
+		<script src="libs2/kore-pickers.js" type="text/javascript"></script>
+		<script src="libs2/emoji.js" type="text/javascript"></script>
+		<script src="libs2/recorder.js" type="text/javascript"></script>
+		<script src="libs2/recorderWorker.js" type="text/javascript"></script>
+		<link href="chatWindow.css" rel="stylesheet"></link>
+		<link href="libs2/emojione.sprites.css" rel="stylesheet"></link>
+		<link href="libs2/purejscarousel.css" rel="stylesheet"></link>
+		<script src="libs2/purejscarousel.js" type="text/javascript"></script>
+		<script src="custom/customTemplate.js" type="text/javascript"></script>
+		<link href="libs2/prefect-scrollbar.css" rel="stylesheet"></link>
+		<link href="custom/customTemplate.css" rel="stylesheet"></link>
+		<!-- <script type="text/javascript" src="libs/loader.js"></script>  -->
+		
+		<!-- Uncomment these lines for Google Speech. -->
+		<!-- <script type="text/javascript" src="../libs/speech/app.js"></script>
+		<script type="text/javascript" src="../libs/speech/key.js"></script>
+		<script type="text/javascript" src="https://apis.google.com/js/client.js"></script> -->
+		
+		<script src="kore-config.js" type="text/javascript"></script>
+		<!-- <script src="kore-118n-config.js" type="text/javascript"></script> --> <!-- Uncomment for i18n support -->
+		<script src="kore-main.js" type="text/javascript"></script>	
+		<script src="libs/kore-no-conflict-end.js" type="text/javascript"></script>
+		<script type="text/javascript">
+
+			function generateJWT(body, secret) {
+							header = {
+								"alg": "HS256",
+								"typ": "JWT"
+							}
+			
+							var token = []
+							token[0] = base64url(JSON.stringify(header))
+							token[1] = base64url(JSON.stringify(body))
+							token[2] = genTokenSign(token, secret)
+							return token.join(".");
+						}
+			
+						function genTokenSign(token, secret) {
+							if (token.length != 2) {
+								return
+							}
+							var hash = CryptoJS.HmacSHA256(token.join("."), secret);
+							var base64Hash = CryptoJS.enc.Base64.stringify(hash);
+							return urlConvertBase64(base64Hash);
+						}
+			
+			
+						function base64url(input) {
+							var base64String = btoa(input);
+							return urlConvertBase64(base64String);
+						}
+			
+						function urlConvertBase64(input) {
+							var output = input.replace(/=+$/, '');
+							output = output.replace(/\+/g, '-');
+							output = output.replace(/\//g, '_');
+							return output;
+						}
+			
+			
+						function koreGenerateUUID() {
+							console.info("generating UUID");
+							var d = new Date().getTime();
+							if (window.performance && typeof window.performance.now === "function") {
+								d += performance.now(); //use high-precision timer if available
+							}
+							var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+								var r = (d + Math.random() * 16) % 16 | 0;
+								d = Math.floor(d / 16);
+								return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+							});
+							return uuid;
+						}
+						</script>
+	</head>
+	<body>
+		<img src="universal.png" width= "100%" >
+		<div id="chatContainer">
+			<button class="openChatWindow">Open Chat Window</button>
+		</div>
+	</body>
+</html>
